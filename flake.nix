@@ -4,39 +4,25 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs";
     flake-utils.url = "github:numtide/flake-utils";
+    icetainer-tools.url = "path:./icetainer-tools";
   };
 
   outputs = {
     self,
     nixpkgs,
     flake-utils,
+    icetainer-tools
   }:
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = nixpkgs.legacyPackages.${system};
-      run-qemu-image = pkgs.writeShellScriptBin "run-qemu-image" ''
-        #!/usr/bin/env bash
-        set -e
-
-        QEMU_IMAGE="qemu-image:latest"
-        VM_IMAGE="$PWD/build/nixos.qcow2"
-
-        echo "Loading Docker image..."
-        docker load < ${self.qemuImage.${system}}
-
-        echo "Copying VM image..."
-        rm -rf build
-        mkdir -p build
-        cp "${self.packages.${system}.qcow2}/nixos.qcow2" "$VM_IMAGE"
-
-        echo "Running Docker container..."
-        docker run --privileged --rm -d -p 2222:2222 -p 25560:25560 -v "$VM_IMAGE":/app.qcow2 "$QEMU_IMAGE"
-      '';
       startVmScript = builtins.readFile ./startvm.sh;
+      icetainerTools = icetainer-tools.packages.${system}.default;
     in {
       devShells = {
         default = pkgs.mkShell {
           buildInputs = [
-            run-qemu-image
+            pkgs.alejandra
+            pkgs.gnumake
           ];
         };
       };
@@ -53,6 +39,7 @@
           pkgs.bash
           pkgs.socat
           (pkgs.writeScriptBin "startvm" startVmScript)
+          icetainerTools
         ];
 
         config = {
