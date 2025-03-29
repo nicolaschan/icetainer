@@ -1,0 +1,8 @@
+[package]
+name = "stasis-tools"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow = "1.0"
+qapi = { version = "0.15", features = ["qapi-qga", "qapi-qmp"] }

@@ -4,19 +4,19 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs";
     flake-utils.url = "github:numtide/flake-utils";
-    icetainer-tools.url = "path:./icetainer-tools";
+    stasis-tools.url = "path:./stasis-tools";
   };
 
   outputs = {
     self,
     nixpkgs,
     flake-utils,
-    icetainer-tools
+    stasis-tools
   }:
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = nixpkgs.legacyPackages.${system};
       startVmScript = builtins.readFile ./startvm.sh;
-      icetainerTools = icetainer-tools.packages.${system}.default;
+      stasisTools = stasis-tools.packages.${system}.default;
     in {
       devShells = {
         default = pkgs.mkShell {
@@ -39,7 +39,7 @@
           pkgs.bash
           pkgs.socat
           (pkgs.writeScriptBin "startvm" startVmScript)
-          icetainerTools
+          stasisTools
         ];
 
         config = {

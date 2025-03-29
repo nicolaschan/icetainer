@@ -21,8 +21,8 @@
         };
         
         rustPackage = pkgs.rustPlatform.buildRustPackage {
-          pname = "icetainer-tools";
-          version = "0.1.4";
+          pname = "stasis-tools";
+          version = "0.1.0";
           src = ./.;
           cargoLock.lockFile = ./Cargo.lock;
         };

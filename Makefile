@@ -40,7 +40,7 @@ run: stop build
 		$(IMAGE_NAME)
 
 pause:
-	-docker exec -it $(CONTAINER_NAME) icetainer-tools
+	-docker exec -it $(CONTAINER_NAME) stasis-tools
 
 stop: pause
 	@docker stop $(CONTAINER_NAME) 2>/dev/null || true

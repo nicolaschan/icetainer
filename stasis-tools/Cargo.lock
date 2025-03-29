@@ -15,14 +15,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "72b3254f16251a8381aa12e40e3c4d2f0199f8c6508fbecb9d91f575e0fbb8c6"
 
 [[package]]
-name = "icetainer-tools"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "qapi",
-]
-
-[[package]]
 name = "itoa"
 version = "1.0.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -30,9 +22,9 @@ checksum = "4a5f13b858c8d314ee3e8f639011f7ccefe71f97f96e50151fb991f267928e2c"
 
 [[package]]
 name = "log"
-version = "0.4.26"
+version = "0.4.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "30bde2b3dc3671ae49d8e2e9f044c7c005836e7a023ee57cffa25ab82764bb9e"
+checksum = "13dc2df351e3202783a1fe0d44375f7295ffb4049267b0f3018346dc122a1d94"
 
 [[package]]
 name = "memchr"
@@ -51,9 +43,9 @@ dependencies = [
 
 [[package]]
 name = "qapi"
-version = "0.12.0"
+version = "0.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b214b3500cc6c5dd8a9892e344d06c1aa2411ffebb3bdde4003f8d80c2aa8f23"
+checksum = "7b047adab56acc4948d4b9b58693c1f33fd13efef2d6bb5f0f66a47436ceada8"
 dependencies = [
  "log",
  "qapi-qga",
@@ -65,18 +57,18 @@ dependencies = [
 
 [[package]]
 name = "qapi-codegen"
-version = "0.10.4"
+version = "0.11.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "09ccfafad1399bb5ec3279b80b4812fc958f10902372c702b169d08a8dca2b95"
+checksum = "fb959fed63a69baa2e3ae57224d885e686bc3f56c9bb3b03406969980ea57a44"
 dependencies = [
  "qapi-parser",
 ]
 
 [[package]]
 name = "qapi-parser"
-version = "0.9.1"
+version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "af62aa26fc18770a938fe38f661d06daf4e3dae7fc5f466cadcc5d7aebbfb332"
+checksum = "7b37f643cfdf67a409a9323334138a11636a5db5d56cedcc780d7a82a7fb7659"
 dependencies = [
  "serde",
  "serde_json",
@@ -84,9 +76,9 @@ dependencies = [
 
 [[package]]
 name = "qapi-qga"
-version = "0.10.1"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f8862c687580e2f0433d328713b0ede316dd763e0727834ddfa524e4e82d8da9"
+checksum = "2945a1829999b7e600b98c8326615ece10df20bc9e9ab12ec057a6aa29b7317d"
 dependencies = [
  "qapi-codegen",
  "qapi-spec",
@@ -95,9 +87,9 @@ dependencies = [
 
 [[package]]
 name = "qapi-qmp"
-version = "0.12.0"
+version = "0.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3b0326bccc373fce927eb5ec66cf44ad141e656cfa26752e5d6a4a80d4f7875a"
+checksum = "45303cac879d89361cad0287ae15f9ae1e7799b904b474152414aeece39b9875"
 dependencies = [
  "qapi-codegen",
  "qapi-spec",
@@ -160,6 +152,14 @@ dependencies = [
  "memchr",
  "ryu",
  "serde",
+]
+
+[[package]]
+name = "stasis-tools"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "qapi",
 ]
 
 [[package]]
