@@ -19,7 +19,7 @@ IMAGE_NAME := qemu-image:latest
 CONTAINER_NAME := qemu-container
 
 $(QEMU_IMAGE): $(FLAKE_FILE) $(FLAKE_LOCK) $(NIX_FILES) $(SH_FILES) $(RUST_FILES)
-	nix build .#qemuImage
+	nix build .#image
 	mkdir -p $(BUILD_DIR)
 	cp -f -L result $(QEMU_IMAGE)
 

@@ -27,7 +27,7 @@
         };
       };
 
-      qemuImage = pkgs.dockerTools.buildImage {
+      image = pkgs.dockerTools.buildImage {
         name = "qemu-image";
         tag = "latest";
 
@@ -59,10 +59,10 @@
 
       packages = {
         qcow2 = self.nixosConfigurations.${system}.vm.config.system.build.qcow2;
-        qemuImage = self.qemuImage.${system};
+        image = self.image.${system};
         all = pkgs.runCommand "all-outputs" {} ''
           mkdir -p $out/images
-          cp -L ${self.qemuImage.${system}} $out/images/qemu-image.tar.gz
+          cp -L ${self.image.${system}} $out/images/qemu-image.tar.gz
         '';
       };
     });
