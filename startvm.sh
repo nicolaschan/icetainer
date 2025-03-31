@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 MEMORY_MIB=2048
 SNAPSHOT_NAME="vm_snapshot_latest"
 VM_IMAGE="/app.qcow2"
