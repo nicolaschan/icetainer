@@ -45,7 +45,7 @@ run: stop build load
 	docker run --privileged --rm -d \
 		-p 2222:2222 \
 		-p 25560:25560 \
-		-v $(PWD)/$(BUILD_DIR):/app/vm-images \
+		-v $(PWD)/$(BUILD_DIR):/app/build \
 		--name $(CONTAINER_NAME) \
 		$(IMAGE_NAME)
 
