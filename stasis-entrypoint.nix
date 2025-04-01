@@ -15,6 +15,7 @@ writeShellApplication {
   MEMORY_MIB=2048
   SNAPSHOT_NAME="vm_snapshot_latest"
   VM_IMAGE="''${1:-build/app.qcow2}"
+  SOCKET_DIR="''${2:-/tmp}"
 
   if [[ "''${AUTO_BUILD_IMAGE:-false}" == "true" ]] && [ ! -f "$VM_IMAGE" ]; then
     nix build .#vm
@@ -29,16 +30,18 @@ writeShellApplication {
     LOADVM_ARG=()
   fi
 
+  echo "VM_IMAGE=$VM_IMAGE"
+  echo "SOCKET_DIR=$SOCKET_DIR"
   echo "LOADVM_ARG=''${LOADVM_ARG[*]}"
 
-  mkdir -p /tmp
+  mkdir -p "$SOCKET_DIR"
   qemu-system-x86_64 -enable-kvm -m $MEMORY_MIB -cpu host -nographic \
     -drive if=virtio,file="$VM_IMAGE" \
     -netdev user,id=net0,hostfwd=tcp::2222-:22,hostfwd=tcp::25560-:25565 -device virtio-net-pci,netdev=net0 \
     -device virtio-serial \
-    -chardev socket,path=/tmp/qga.sock,wait=off,server=on,id=qga0 \
+    -chardev socket,path="$SOCKET_DIR"/qga.sock,wait=off,server=on,id=qga0 \
     -device virtserialport,chardev=qga0,name=org.qemu.guest_agent.0 \
-    -qmp unix:/tmp/qemu-sock,server,nowait \
-    -monitor unix:/tmp/qemu_monitor.sock,server,nowait "''${LOADVM_ARG[@]}"
+    -qmp unix:"$SOCKET_DIR"/qemu-sock,server,nowait \
+    -monitor unix:"$SOCKET_DIR"/qemu_monitor.sock,server,nowait "''${LOADVM_ARG[@]}"
   '';
 }
