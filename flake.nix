@@ -42,12 +42,10 @@
         fromImage = nixosNixImage;
 
         copyToRoot = [
-          pkgs.qemu_full
+          pkgs.qemu_kvm
           pkgs.busybox
           pkgs.coreutils
-          pkgs.htop
           pkgs.bash
-          pkgs.fish
           pkgs.socat
           (pkgs.writeScriptBin "startvm" startVmScript)
           stasisTools
