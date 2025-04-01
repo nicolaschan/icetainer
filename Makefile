@@ -25,6 +25,7 @@ $(QEMU_IMAGE): $(FLAKE_FILE) $(FLAKE_LOCK) $(NIX_FILES) $(SH_FILES) $(RUST_FILES
 
 $(VM_QCOW2): $(FLAKE_FILE) $(FLAKE_LOCK) $(NIX_FILES) $(SH_FILES) $(RUST_FILES)
 	nix build .#vm
+	mkdir -p $(BUILD_DIR)
 	cp -f -L result/nixos.qcow2 $(VM_QCOW2)
 
 build: $(QEMU_IMAGE) $(VM_QCOW2)
