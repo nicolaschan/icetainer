@@ -51,6 +51,12 @@
           pkgs.socat
           (pkgs.writeScriptBin "startvm" startVmScript)
           stasisTools
+          (pkgs.writeScriptBin "entrypoint" ''
+            #!/bin/sh
+            # Ensure /bin is in PATH regardless of environment variables
+            export PATH="/bin:$PATH"
+            exec "$@"
+          '')
           (pkgs.runCommand "nix-scripts" {} ''
             mkdir -p $out/app
             cp -r ${./flake.nix} $out/app/flake.nix
@@ -58,14 +64,15 @@
             cp -r ${./make-qcow2.nix} $out/app/make-qcow2.nix
             cp -r ${./vm-config.nix} $out/app/vm-config.nix
             cp -r ${./stasis-tools} $out/app/stasis-tools
+            cp -r ${./startvm.sh} $out/app/startvm.sh
           '')
         ];
 
         config = {
+          Entrypoint = ["/bin/entrypoint"];
           Cmd = ["startvm"];
           Env = [
             "NIX_CONFIG=experimental-features = nix-command flakes"
-            "PATH=/bin:/root/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin"
           ];
         };
       };
@@ -81,7 +88,7 @@
       };
 
       packages = {
-        qcow2 = self.nixosConfigurations.${system}.vm.config.system.build.qcow2;
+        vm = self.nixosConfigurations.${system}.vm.config.system.build.qcow2;
         image = self.image.${system};
         all = pkgs.runCommand "all-outputs" {} ''
           mkdir -p $out/images

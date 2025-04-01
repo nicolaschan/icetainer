@@ -5,7 +5,7 @@ all: build
 # outputs
 BUILD_DIR := build
 QEMU_IMAGE := $(BUILD_DIR)/qemu-image
-VM_QCOW2 := $(BUILD_DIR)/nixos.qcow2
+VM_QCOW2 := $(BUILD_DIR)/app.qcow2
 
 # sources
 FLAKE_FILE := flake.nix
@@ -24,23 +24,33 @@ $(QEMU_IMAGE): $(FLAKE_FILE) $(FLAKE_LOCK) $(NIX_FILES) $(SH_FILES) $(RUST_FILES
 	cp -f -L result $(QEMU_IMAGE)
 
 $(VM_QCOW2): $(FLAKE_FILE) $(FLAKE_LOCK) $(NIX_FILES) $(SH_FILES) $(RUST_FILES)
-	nix build .#qcow2
+	nix build .#vm
 	cp -f -L result/nixos.qcow2 $(VM_QCOW2)
 
 build: $(QEMU_IMAGE) $(VM_QCOW2)
 	@echo "Build up to date!"
 
-run: stop build
+load: build
 	docker load < $(QEMU_IMAGE)
+
+run: stop build load
 	docker run --privileged --rm -d \
 		-p 2222:2222 \
 		-p 25560:25560 \
-		-v $(PWD)/$(VM_QCOW2):/app.qcow2 \
+		-v $(PWD)/$(BUILD_DIR):/app/vm-images \
+		--name $(CONTAINER_NAME) \
+		$(IMAGE_NAME)
+
+run-build: load
+	docker run --privileged --rm -d \
+		-p 2222:2222 \
+		-p 25560:25560 \
+		-e "AUTO_BUILD_IMAGE=true" \
 		--name $(CONTAINER_NAME) \
 		$(IMAGE_NAME)
 
 pause:
-	-docker exec -it $(CONTAINER_NAME) stasis-tools
+	-docker exec -it $(CONTAINER_NAME) /bin/stasis-tools
 
 stop: pause
 	@docker stop $(CONTAINER_NAME) 2>/dev/null || true

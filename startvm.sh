@@ -1,7 +1,15 @@
 #!/bin/bash
 MEMORY_MIB=2048
 SNAPSHOT_NAME="vm_snapshot_latest"
-VM_IMAGE="/app.qcow2"
+VM_IMAGE="/app/vm-images/app.qcow2"
+
+mkdir -p /app/vm-images
+pushd /app
+
+if [[ "$AUTO_BUILD_IMAGE" == "true" ]]; then
+  nix build .#vm
+  cp -L result/nixos.qcow2 "$VM_IMAGE"
+fi
 
 if qemu-img snapshot -l "$VM_IMAGE" | grep -q $SNAPSHOT_NAME; then
   LOADVM_ARG="-loadvm $SNAPSHOT_NAME"
