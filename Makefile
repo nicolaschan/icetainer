@@ -31,8 +31,8 @@ build: $(QEMU_IMAGE) $(VM_QCOW2)
 	@echo "Build up to date!"
 
 build-docker: clean
-	docker run --privileged -it \
-		-v $PWD:/app \
+	docker run --privileged \
+		-v $(PWD):/app \
 		-e "NIX_CONFIG=experimental-features = nix-command flakes" \
 		nixos/nix \
 		bash -c 'cp -r /app /app2 && cd /app2 && nix run nixpkgs#gnumake && cp -r /app2/build /app/build && chown -R 1000 /app/build'
