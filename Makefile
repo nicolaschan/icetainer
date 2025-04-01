@@ -1,4 +1,4 @@
-.PHONY: build run pause stop clean update
+.PHONY: build build-docker run pause stop clean update
 
 all: build
 
@@ -29,6 +29,13 @@ $(VM_QCOW2): $(FLAKE_FILE) $(FLAKE_LOCK) $(NIX_FILES) $(SH_FILES) $(RUST_FILES)
 
 build: $(QEMU_IMAGE) $(VM_QCOW2)
 	@echo "Build up to date!"
+
+build-docker: clean
+	docker run --privileged -it \
+		-v $PWD:/app \
+		-e "NIX_CONFIG=experimental-features = nix-command flakes" \
+		nixos/nix \
+		bash -c 'cp -r /app /app2 && cd /app2 && nix run nixpkgs#gnumake && cp -r /app2/build /app/build && chown -R 1000 /app/build'
 
 load: build
 	docker load < $(QEMU_IMAGE)
