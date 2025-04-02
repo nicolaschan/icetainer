@@ -53,7 +53,7 @@ run-build: load
 	docker run --privileged --rm -d \
 		-p 2222:2222 \
 		-p 25560:25560 \
-		-e "AUTO_BUILD_IMAGE=true" \
+		-e "STASIS_AUTO_BUILD_IMAGE=true" \
 		--name $(CONTAINER_NAME) \
 		$(IMAGE_NAME)
 

@@ -14,10 +14,10 @@ writeShellApplication {
 
   MEMORY_MIB=2048
   SNAPSHOT_NAME="vm_snapshot_latest"
-  VM_IMAGE="''${1:-build/app.qcow2}"
-  SOCKET_DIR="''${2:-/tmp}"
+  VM_IMAGE="''${STASIS_VM_IMAGE:-build/app.qcow2}"
+  SOCKET_DIR="''${STASIS_SOCKET_DIR:-/tmp}"
 
-  if [[ "''${AUTO_BUILD_IMAGE:-false}" == "true" ]] && [ ! -f "$VM_IMAGE" ]; then
+  if [[ "''${STASIS_AUTO_BUILD_IMAGE:-false}" == "true" ]] && [ ! -f "$VM_IMAGE" ]; then
     nix build .#vm
     mkdir -p "$(dirname "$VM_IMAGE")"
     cp -L result/nixos.qcow2 "$VM_IMAGE"
