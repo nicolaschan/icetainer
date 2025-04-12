@@ -1,4 +1,4 @@
-{ pkgs, writeShellApplication, ... }:
+{ pkgs, writeShellApplication, stasisTools, ... }:
 
 writeShellApplication {
   name = "stasis-entrypoint";
@@ -7,6 +7,7 @@ writeShellApplication {
     pkgs.nix
     pkgs.qemu_kvm
     pkgs.coreutils
+    stasisTools
   ];
 
   text = ''
@@ -26,6 +27,7 @@ writeShellApplication {
 
   if qemu-img snapshot -l "$VM_IMAGE" | grep -q $SNAPSHOT_NAME; then
     LOADVM_ARG=("-loadvm" "$SNAPSHOT_NAME")
+    stasis-tools unfreeze --wait &
   else
     LOADVM_ARG=()
   fi

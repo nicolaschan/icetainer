@@ -58,7 +58,7 @@ run-build: load
 		$(IMAGE_NAME)
 
 pause:
-	-docker exec -it $(CONTAINER_NAME) /bin/stasis-tools
+	-docker exec -it $(CONTAINER_NAME) /bin/stasis-tools snapshot
 
 stop: pause
 	@docker stop $(CONTAINER_NAME) 2>/dev/null || true
